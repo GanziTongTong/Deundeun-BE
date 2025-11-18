@@ -1,18 +1,30 @@
 spring:
   profiles:
-    active: dev
+    active: local
   datasource:
     url: ${spring.datasource.url}
     username: ${spring.datasource.username}
     password: ${spring.datasource.password}
 
+  sql:
+    init:
+      mode: never  # SQL 스크립트 자동 실행 비활성화
+      data-locations:
+        - classpath:store.sql
+      continue-on-error: false
+
   jpa:
     database: mysql
     database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
-      ddl-auto: update
-    show-sql: true
+      ddl-auto: update  # 스키마만 생성/업데이트, 데이터는 유지
+    show-sql: true  # SQL 로그 다시 활성화
     properties:
       hibernate:
-        format_sql: false
+        format_sql: true
         use_sql_comments: true
+        jdbc:
+          batch_size: 100
+        order_inserts: true
+        order_updates: true
+    defer-datasource-initialization: true
