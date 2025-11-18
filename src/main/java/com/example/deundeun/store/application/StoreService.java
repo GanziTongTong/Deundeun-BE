@@ -16,15 +16,25 @@ public class StoreService {
     private final StoreRepository storeRepository;
 
     /**
-     * 반경 내 전체 가맹점 조회
+     * 반경 내 전체 가맹점 조회 (카테고리 필터 선택 가능)
      */
     public List<StoreDistanceDto> findNearbyStores(
             double userLatitude,
             double userLongitude,
-            double radiusKm
+            double radiusKm,
+            com.example.deundeun.store.domin.Category category
     ) {
-        List<Store> stores = storeRepository.findStoresWithinDistance(
-                userLatitude, userLongitude, radiusKm);
+        List<Store> stores;
+
+        if (category != null) {
+            // 카테고리 필터가 있는 경우
+            stores = storeRepository.findStoresWithinDistanceByCategory(
+                    userLatitude, userLongitude, radiusKm, category.name());
+        } else {
+            // 카테고리 필터가 없는 경우 전체 조회
+            stores = storeRepository.findStoresWithinDistance(
+                    userLatitude, userLongitude, radiusKm);
+        }
 
         return convertToDistanceDto(userLatitude, userLongitude, stores);
     }
@@ -46,16 +56,26 @@ public class StoreService {
     }
 
     /**
-     * 가게명 검색 + 반경 내 조회 (카테고리 필터 안함)
+     * 가게명 검색 + 반경 내 조회 (카테고리 필터 선택 가능)
      */
     public List<StoreDistanceDto> searchStoresByName(
             double userLatitude,
             double userLongitude,
             double radiusKm,
-            String keyword
+            String keyword,
+            com.example.deundeun.store.domin.Category category
     ) {
-        List<Store> stores = storeRepository.findStoresWithinDistanceByName(
-                userLatitude, userLongitude, radiusKm, keyword);
+        List<Store> stores;
+
+        if (category != null) {
+            // 카테고리 필터가 있는 경우
+            stores = storeRepository.findStoresWithinDistanceByCategoryAndName(
+                    userLatitude, userLongitude, radiusKm, category.name(), keyword);
+        } else {
+            // 카테고리 필터가 없는 경우
+            stores = storeRepository.findStoresWithinDistanceByName(
+                    userLatitude, userLongitude, radiusKm, keyword);
+        }
 
         return convertToDistanceDto(userLatitude, userLongitude, stores);
     }
