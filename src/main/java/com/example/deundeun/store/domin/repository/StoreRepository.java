@@ -26,9 +26,9 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
                     "ORDER BY distance ASC",
             nativeQuery = true)
     List<Store> findStoresWithinDistance(
-            double latitude,
-            double longitude,
-            double distance
+            @Param("latitude") double latitude,
+            @Param("longitude") double longitude,
+            @Param("distance") double distance
     );
 
     // 가게명 검색 + 반경 내 조회
@@ -56,3 +56,4 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
             @Param("keyword") String keyword
     );
 }
+

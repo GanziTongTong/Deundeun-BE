@@ -39,6 +39,13 @@ public class StoreService {
     }
 
     /**
+     * 전체 가맹점 수 조회 (테스트용)
+     */
+    public Long getStoreCount() {
+        return storeRepository.count();
+    }
+
+    /**
      * 가게명 검색 + 반경 내 조회 (카테고리 필터 안함)
      */
     public List<StoreDistanceDto> searchStoresByName(
