@@ -2,6 +2,7 @@ package com.example.deundeun.store.domin.repository;
 
 import com.example.deundeun.store.domin.Store;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -55,5 +56,7 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
             @Param("radiusKm") double radiusKm,
             @Param("keyword") String keyword
     );
+
+    Optional<Store> findByFacltNm(String facltNm);
 }
 

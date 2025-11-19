@@ -28,3 +28,20 @@ spring:
         order_inserts: true
         order_updates: true
     defer-datasource-initialization: true
+
+
+upstage:
+  api:
+    key: ${upstage.api.key}
+
+cloud:
+  aws:
+    s3:
+      bucket: ${cloud.aws.s3.bucket}
+    credentials:
+      access-key: ${cloud.aws.credentials.access-key}
+      secret-key: ${cloud.aws.credentials.secret-key}
+    region:
+      static: ${cloud.aws.region.static}
+    stack:
+      auto: false
