@@ -6,6 +6,7 @@ import com.example.deundeun.store.api.dto.response.StoreInfoDto;
 import com.example.deundeun.store.application.StoreService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -37,7 +38,8 @@ public class StoreController {
                     "- 거리가 가까운 순서로 정렬되어 반환됩니다.",
             responses = {
                 @ApiResponse(responseCode = "200", description = "조회 성공",
-                        content = @Content(schema = @Schema(implementation = StoreDistanceDto.class)))
+                        content = @Content(mediaType = "application/json",
+                                array = @ArraySchema(schema = @Schema(implementation = StoreDistanceDto.class))))
             }
     )
     @PostMapping

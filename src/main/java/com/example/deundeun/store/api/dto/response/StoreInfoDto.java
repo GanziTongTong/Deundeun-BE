@@ -23,7 +23,13 @@ public record StoreInfoDto(
         String phoneNumber,
 
         @Schema(description = "영업시간", example = "09:00-21:00")
-        String openingHours
+        String openingHours,
+
+        @Schema(description = "위도", example = "37.55315")
+        Double latitude,
+
+        @Schema(description = "경도", example = "127.0240298256")
+        Double longitude
 ) {
     public static StoreInfoDto from(Store store) {
         return new StoreInfoDto(
@@ -32,6 +38,18 @@ public record StoreInfoDto(
                 store.getCategoryList(),
                 store.getRoadnmAddr(),
                 store.getPhoneNumber(),
-                store.getOpeningHours());
+                store.getOpeningHours(),
+                parseDoubleOrNull(store.getLat()),
+                parseDoubleOrNull(store.getLogt())
+        );
+    }
+
+    private static Double parseDoubleOrNull(String s) {
+        if (s == null) return null;
+        try {
+            return Double.parseDouble(s.trim());
+        } catch (NumberFormatException e) {
+            return null;
+        }
     }
 }

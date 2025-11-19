@@ -32,6 +32,12 @@ public class StoreDistanceDto {
     @Schema(description = "영업시간", example = "09:00-21:00")
     private String openingHours;
 
+    @Schema(description = "위도", example = "37.55315")
+    private Double latitude;
+
+    @Schema(description = "경도", example = "127.0240298256")
+    private Double longitude;
+
     public static StoreDistanceDto of(Store store, double distance) {
         return new StoreDistanceDto(
                 store.getId(),
@@ -40,7 +46,18 @@ public class StoreDistanceDto {
                 store.getCategoryList(),
                 distance,
                 store.getPhoneNumber(),
-                store.getOpeningHours()
+                store.getOpeningHours(),
+                parseDoubleOrNull(store.getLat()),
+                parseDoubleOrNull(store.getLogt())
         );
+    }
+
+    private static Double parseDoubleOrNull(String s) {
+        if (s == null) return null;
+        try {
+            return Double.parseDouble(s.trim());
+        } catch (NumberFormatException e) {
+            return null;
+        }
     }
 }
