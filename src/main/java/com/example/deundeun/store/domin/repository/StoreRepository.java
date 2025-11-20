@@ -2,7 +2,6 @@ package com.example.deundeun.store.domin.repository;
 
 import com.example.deundeun.store.domin.Store;
 import java.util.List;
-import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -57,7 +56,6 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
             @Param("keyword") String keyword
     );
 
-    Optional<Store> findByFacltNm(String facltNm);
     // 카테고리 필터 + 반경 내 조회
     @Query(value =
             "SELECT s.id, s.faclt_nm, s.roadnm_addr, s.sigun_nm, s.lotno_addr, s.logt, s.lat, s.categories, s.phone_number, s.opening_hours, "
@@ -110,4 +108,3 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
             @Param("keyword") String keyword
     );
 }
-

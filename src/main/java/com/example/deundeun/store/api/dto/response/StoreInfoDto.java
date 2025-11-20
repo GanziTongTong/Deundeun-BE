@@ -26,14 +26,15 @@ public record StoreInfoDto(
         @Schema(description = "영업시간", example = "09:00-21:00")
         String openingHours,
 
-        @Schema(description = "리뷰")
-        List<ReviewInfoDto> reviews
         @Schema(description = "위도", example = "37.55315")
         Double latitude,
 
         @Schema(description = "경도", example = "127.0240298256")
-        Double longitude
-) {
+        Double longitude,
+
+        @Schema(description = "리뷰")
+        List<ReviewInfoDto> reviews
+        ) {
     public static StoreInfoDto of(Store store, List<ReviewInfoDto> reviews) {
         return new StoreInfoDto(
                 store.getId(),
@@ -42,10 +43,9 @@ public record StoreInfoDto(
                 store.getRoadnmAddr(),
                 store.getPhoneNumber(),
                 store.getOpeningHours(),
-                reviews
-        );
                 parseDoubleOrNull(store.getLat()),
-                parseDoubleOrNull(store.getLogt())
+                parseDoubleOrNull(store.getLogt()),
+                reviews
         );
     }
 

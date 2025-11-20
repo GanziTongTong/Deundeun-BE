@@ -76,9 +76,4 @@ public class Store {
         }
         return categoryList;
     }
-
-    // 특정 카테고리를 포함하는지 확인
-    public boolean hasCategory(Category category) {
-        return categories != null && categories.contains(category.name());
-    }
 }

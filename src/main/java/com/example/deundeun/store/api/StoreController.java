@@ -2,6 +2,7 @@ package com.example.deundeun.store.api;
 
 import com.example.deundeun.store.api.dto.request.StoreDto;
 import com.example.deundeun.store.api.dto.response.ListStoreDto;
+import com.example.deundeun.store.api.dto.response.StoreDistanceDto;
 import com.example.deundeun.store.api.dto.response.StoreInfoDto;
 import com.example.deundeun.store.application.StoreService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -36,13 +37,13 @@ public class StoreController {
                     "  (CHILD_MEAL_CARD: 아동급식카드, GOOD_NEIGHBOR_STORE: 좋은이웃가게, GOOD_INFLUENCE_STORE: 선한영향력가게)\n" +
                     "- 거리가 가까운 순서로 정렬되어 반환됩니다.",
             responses = {
-                @ApiResponse(responseCode = "200", description = "조회 성공",
-                        content = @Content(mediaType = "application/json",
-                                array = @ArraySchema(schema = @Schema(implementation = StoreDistanceDto.class))))
+                    @ApiResponse(responseCode = "200", description = "조회 성공",
+                            content = @Content(mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = StoreDistanceDto.class))))
             }
     )
     @PostMapping
-    public ResponseEntity<List<StoreDistanceDto>> getAllStore(
+    public ResponseEntity<ListStoreDto> getAllStore(
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     description = "사용자 위치 정보, 검색 반경 및 카테고리 필터",
                     required = true,
@@ -52,13 +53,12 @@ public class StoreController {
                     )
             )
             @RequestBody StoreDto storeDto) {
-        List<StoreDistanceDto> listStoreDto = storeService.findNearbyStores(
+        return ResponseEntity.ok(storeService.findNearbyStores(
                 storeDto.user_latitude(),
                 storeDto.user_longitude(),
                 storeDto.getRadiusKm(),
                 storeDto.category()
-        );
-        return ResponseEntity.ok(listStoreDto);
+        ));
     }
 
     @Operation(
@@ -84,19 +84,10 @@ public class StoreController {
                     "- category를 입력하면 해당 카테고리 가맹점만 검색합니다\n" +
                     "- 거리가 가까운 순서로 정렬됩니다",
             responses = {
-                @ApiResponse(responseCode = "200", description = "검색 성공")
+                    @ApiResponse(responseCode = "200", description = "검색 성공")
             }
     )
-    @PostMapping("/search")
-    public ResponseEntity<List<StoreDistanceDto>> searchStoresByName(
-            @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    description = "사용자 위치 정보, 검색 반경 및 카테고리 필터",
-                    required = true,
-                    content = @Content(
-                            schema = @Schema(implementation = StoreDto.class),
-                            mediaType = "application/json"
-                    ))
-    )
+
     @PostMapping("/search")
     public ResponseEntity<ListStoreDto> searchStoresByName(
             @RequestBody StoreDto storeDto,
