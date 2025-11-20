@@ -18,7 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/review")
+@RequestMapping("/api/reviews")
 @Tag(name = "리뷰 API", description = "리뷰 생성 API")
 public class ReviewController {
 
