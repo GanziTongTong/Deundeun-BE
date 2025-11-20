@@ -1,5 +1,6 @@
 package com.example.deundeun.store.api.dto.response;
 
+import com.example.deundeun.review.api.dto.response.ReviewInfoDto;
 import com.example.deundeun.store.domin.Category;
 import com.example.deundeun.store.domin.Store;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -25,13 +26,15 @@ public record StoreInfoDto(
         @Schema(description = "영업시간", example = "09:00-21:00")
         String openingHours,
 
+        @Schema(description = "리뷰")
+        List<ReviewInfoDto> reviews
         @Schema(description = "위도", example = "37.55315")
         Double latitude,
 
         @Schema(description = "경도", example = "127.0240298256")
         Double longitude
 ) {
-    public static StoreInfoDto from(Store store) {
+    public static StoreInfoDto of(Store store, List<ReviewInfoDto> reviews) {
         return new StoreInfoDto(
                 store.getId(),
                 store.getFacltNm(),
@@ -39,6 +42,8 @@ public record StoreInfoDto(
                 store.getRoadnmAddr(),
                 store.getPhoneNumber(),
                 store.getOpeningHours(),
+                reviews
+        );
                 parseDoubleOrNull(store.getLat()),
                 parseDoubleOrNull(store.getLogt())
         );

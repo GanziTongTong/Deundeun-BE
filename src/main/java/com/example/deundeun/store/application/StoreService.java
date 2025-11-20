@@ -1,5 +1,12 @@
 package com.example.deundeun.store.application;
 
+import com.example.deundeun.review.api.dto.response.ReviewImageDto;
+import com.example.deundeun.review.api.dto.response.ReviewInfoDto;
+import com.example.deundeun.review.api.dto.response.ReviewKeywordDto;
+import com.example.deundeun.review.domain.Review;
+import com.example.deundeun.review.domain.repository.ReviewImageRepository;
+import com.example.deundeun.review.domain.repository.ReviewRepository;
+import com.example.deundeun.store.api.dto.response.ListStoreDto;
 import com.example.deundeun.store.api.dto.response.StoreDistanceDto;
 import com.example.deundeun.store.api.dto.response.StoreInfoDto;
 import com.example.deundeun.store.domin.Store;
@@ -14,11 +21,13 @@ import org.springframework.stereotype.Service;
 public class StoreService {
 
     private final StoreRepository storeRepository;
+    private final ReviewRepository reviewRepository;
+    private final ReviewImageRepository reviewImageRepository;
 
     /**
      * 반경 내 전체 가맹점 조회 (카테고리 필터 선택 가능)
      */
-    public List<StoreDistanceDto> findNearbyStores(
+    public ListStoreDto findNearbyStores(
             double userLatitude,
             double userLongitude,
             double radiusKm,
@@ -45,7 +54,33 @@ public class StoreService {
     public StoreInfoDto getStoreDetail(Long storeId) {
         Store store = storeRepository.findById(storeId).orElseThrow(() ->
                 new IllegalArgumentException("가맹점을 찾을 수 없습니다."));
-        return StoreInfoDto.from(store);
+
+        List<Review> reviews = reviewRepository.findByStore(store);
+
+        List<ReviewInfoDto> reviewInfoDtos = reviews.stream()
+                .map(review -> {
+
+                    List<ReviewImageDto> imageDtos = reviewImageRepository.findByReview(review)
+                            .stream()
+                            .map(ReviewImageDto::from)
+                            .toList();
+
+                    ReviewKeywordDto keywordDto = new ReviewKeywordDto(
+                            review.getKeywords()
+                                    .stream()
+                                    .map(Enum::name)
+                                    .collect(java.util.stream.Collectors.toSet())
+                    );
+
+                    return ReviewInfoDto.of(
+                            review.getId(),
+                            imageDtos,
+                            keywordDto
+                    );
+                })
+                .toList();
+
+        return StoreInfoDto.of(store, reviewInfoDtos);
     }
 
     /**
@@ -58,7 +93,7 @@ public class StoreService {
     /**
      * 가게명 검색 + 반경 내 조회 (카테고리 필터 선택 가능)
      */
-    public List<StoreDistanceDto> searchStoresByName(
+    public ListStoreDto searchStoresByName(
             double userLatitude,
             double userLongitude,
             double radiusKm,
@@ -80,18 +115,19 @@ public class StoreService {
         return convertToDistanceDto(userLatitude, userLongitude, stores);
     }
 
-    private List<StoreDistanceDto> convertToDistanceDto(
+    private ListStoreDto convertToDistanceDto(
             double userLatitude,
             double userLongitude,
             List<Store> stores
     ) {
-        return stores.stream()
+        List<StoreDistanceDto> storeDistanceDtos = stores.stream()
                 .map(store -> {
                     double distance = calculateDistance(userLatitude, userLongitude, Double.parseDouble(store.getLat()),
                             Double.parseDouble(store.getLogt()));
                     return StoreDistanceDto.of(store, distance);
                 })
                 .collect(Collectors.toList());
+        return new ListStoreDto(storeDistanceDtos);
     }
 
     private double calculateDistance(double lat1, double lon1, double lat2, double lon2) {

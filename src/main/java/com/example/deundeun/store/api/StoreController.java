@@ -1,7 +1,7 @@
 package com.example.deundeun.store.api;
 
 import com.example.deundeun.store.api.dto.request.StoreDto;
-import com.example.deundeun.store.api.dto.response.StoreDistanceDto;
+import com.example.deundeun.store.api.dto.response.ListStoreDto;
 import com.example.deundeun.store.api.dto.response.StoreInfoDto;
 import com.example.deundeun.store.application.StoreService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -11,7 +11,6 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -64,10 +63,10 @@ public class StoreController {
 
     @Operation(
             summary = "가맹점 상세조회",
-            description = "가맹점 ID로 특정 가맹점의 상세 정보를 조회합니다.",
+            description = "가맹점 ID로 상세 정보를 조회합니다.",
             responses = {
-                @ApiResponse(responseCode = "200", description = "조회 성공"),
-                @ApiResponse(responseCode = "400", description = "가맹점을 찾을 수 없습니다")
+                    @ApiResponse(responseCode = "200", description = "조회 성공"),
+                    @ApiResponse(responseCode = "400", description = "가맹점을 찾을 수 없습니다")
             }
     )
     @GetMapping("/detail")
@@ -96,11 +95,14 @@ public class StoreController {
                     content = @Content(
                             schema = @Schema(implementation = StoreDto.class),
                             mediaType = "application/json"
-                    )
-            )
+                    ))
+    )
+    @PostMapping("/search")
+    public ResponseEntity<ListStoreDto> searchStoresByName(
             @RequestBody StoreDto storeDto,
-            @Parameter(description = "검색할 가맹점 이름 (부분 검색)", required = true, example = "해물")
-            @RequestParam(value = "keyword") String keyword) {
+            @Parameter(description = "검색할 가맹점 이름", required = true, example = "해물")
+            @RequestParam String keyword) {
+
         return ResponseEntity.ok(storeService.searchStoresByName(
                 storeDto.user_latitude(),
                 storeDto.user_longitude(),
@@ -112,10 +114,8 @@ public class StoreController {
 
     @Operation(
             summary = "[테스트] 전체 가맹점 수 조회",
-            description = "데이터베이스에 저장된 전체 가맹점 수를 반환합니다. (디버깅용)",
-            responses = {
-                @ApiResponse(responseCode = "200", description = "조회 성공")
-            }
+            description = "DB에 저장된 전체 가맹점 수를 반환합니다.",
+            responses = @ApiResponse(responseCode = "200", description = "조회 성공")
     )
     @GetMapping("/count")
     public ResponseEntity<Long> getStoreCount() {
