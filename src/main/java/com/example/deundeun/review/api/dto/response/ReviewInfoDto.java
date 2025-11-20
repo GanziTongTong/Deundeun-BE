@@ -1,16 +1,22 @@
 package com.example.deundeun.review.api.dto.response;
 
-import com.example.deundeun.review.domain.ReviewImage;
-import com.example.deundeun.review.domain.ReviewKeyword;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
-import java.util.Set;
 
+@Schema(description = "리뷰 상세 정보 응답 DTO")
 public record ReviewInfoDto(
+        @Schema(description = "리뷰 ID", example = "1")
         Long reviewId,
-        List<ReviewImage> images,
-        Set<ReviewKeyword> keywords
+
+        @Schema(description = "리뷰 이미지 목록")
+        List<ReviewImageDto> images,
+
+        @Schema(description = "리뷰 키워드 목록")
+        ReviewKeywordDto keywords
 ) {
-    public static ReviewInfoDto from(Long reviewId, List<ReviewImage> images, Set<ReviewKeyword> keywords) {
+    public static ReviewInfoDto of(Long reviewId,
+                                   List<ReviewImageDto> images,
+                                   ReviewKeywordDto keywords) {
         return new ReviewInfoDto(reviewId, images, keywords);
     }
 }
