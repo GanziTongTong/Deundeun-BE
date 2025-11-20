@@ -8,7 +8,7 @@ spring:
 
   sql:
     init:
-      mode: never  # SQL 스크립트 자동 실행 비활성화
+      mode: never  # SQL 스크립트 자동 실행 비활성화 (수동으로 DB에 넣을 예정)
       data-locations:
         - classpath:store.sql
       continue-on-error: false
@@ -18,7 +18,7 @@ spring:
     database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
       ddl-auto: update  # 스키마만 생성/업데이트, 데이터는 유지
-    show-sql: true  # SQL 로그 다시 활성화
+    show-sql: true  # SQL 로그 활성화
     properties:
       hibernate:
         format_sql: true

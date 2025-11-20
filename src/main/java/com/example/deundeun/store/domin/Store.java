@@ -5,21 +5,35 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "store")
+@Table(
+    name = "store",
+    uniqueConstraints = {
+        @UniqueConstraint(
+            name = "uk_store_name_address_category",
+            columnNames = {"faclt_nm", "roadnm_addr", "categories"}
+        )
+    },
+    indexes = {
+        @Index(name = "idx_lat_logt", columnList = "lat, logt"),
+        @Index(name = "idx_categories", columnList = "categories")
+    }
+)
 public class Store {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 255)
     private String facltNm;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 500)
     private String roadnmAddr;
 
     private String sigunNm;
@@ -27,8 +41,9 @@ public class Store {
     private String logt; // 경도
     private String lat; // 위도
 
-    @Enumerated(EnumType.STRING)
-    private Category category;
+    // 카테고리를 콤마로 구분된 문자열로 저장 (예: "CHILD_MEAL_CARD,GOOD_NEIGHBOR_STORE")
+    @Column(length = 500)
+    private String categories;
 
     private String phoneNumber;
 
@@ -36,13 +51,34 @@ public class Store {
     private String openingHours;
 
     @Builder
-    public Store(String sigunNm, String facltNm, String lotnoAddr, String roadnmAddr, String logt, String lat, Category category) {
+    public Store(String sigunNm, String facltNm, String lotnoAddr, String roadnmAddr, String logt, String lat, String categories) {
         this.sigunNm = sigunNm;
         this.facltNm = facltNm;
         this.lotnoAddr = lotnoAddr;
         this.roadnmAddr = roadnmAddr;
         this.logt = logt;
         this.lat = lat;
-        this.category = category;
+        this.categories = categories;
+    }
+
+    // 카테고리 리스트로 반환
+    public List<Category> getCategoryList() {
+        List<Category> categoryList = new ArrayList<>();
+        if (categories != null && !categories.isEmpty()) {
+            String[] categoryArray = categories.split(",");
+            for (String cat : categoryArray) {
+                try {
+                    categoryList.add(Category.valueOf(cat.trim()));
+                } catch (IllegalArgumentException e) {
+                    // 잘못된 카테고리는 무시
+                }
+            }
+        }
+        return categoryList;
+    }
+
+    // 특정 카테고리를 포함하는지 확인
+    public boolean hasCategory(Category category) {
+        return categories != null && categories.contains(category.name());
     }
 }
