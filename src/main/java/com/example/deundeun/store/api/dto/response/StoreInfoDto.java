@@ -1,8 +1,10 @@
 package com.example.deundeun.store.api.dto.response;
 
+import com.example.deundeun.review.api.dto.response.ReviewInfoDto;
 import com.example.deundeun.store.domin.Category;
 import com.example.deundeun.store.domin.Store;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.List;
 
 @Schema(description = "가맹점 상세 정보 DTO")
 public record StoreInfoDto(
@@ -22,15 +24,20 @@ public record StoreInfoDto(
         String phoneNumber,
 
         @Schema(description = "영업시간", example = "09:00-21:00")
-        String openingHours
+        String openingHours,
+
+        @Schema(description = "리뷰")
+        List<ReviewInfoDto> reviews
 ) {
-    public static StoreInfoDto from(Store store) {
+    public static StoreInfoDto of(Store store, List<ReviewInfoDto> reviews) {
         return new StoreInfoDto(
                 store.getId(),
                 store.getFacltNm(),
                 store.getCategory(),
                 store.getRoadnmAddr(),
                 store.getPhoneNumber(),
-                store.getOpeningHours());
+                store.getOpeningHours(),
+                reviews
+        );
     }
 }
