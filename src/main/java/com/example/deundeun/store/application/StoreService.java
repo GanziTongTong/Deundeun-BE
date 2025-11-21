@@ -9,8 +9,8 @@ import com.example.deundeun.review.domain.repository.ReviewRepository;
 import com.example.deundeun.store.api.dto.response.ListStoreDto;
 import com.example.deundeun.store.api.dto.response.StoreDistanceDto;
 import com.example.deundeun.store.api.dto.response.StoreInfoDto;
-import com.example.deundeun.store.domin.Store;
-import com.example.deundeun.store.domin.repository.StoreRepository;
+import com.example.deundeun.store.domain.Store;
+import com.example.deundeun.store.domain.repository.StoreRepository;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +31,7 @@ public class StoreService {
             double userLatitude,
             double userLongitude,
             double radiusKm,
-            com.example.deundeun.store.domin.Category category
+            com.example.deundeun.store.domain.Category category
     ) {
         List<Store> stores;
 
@@ -98,7 +98,7 @@ public class StoreService {
             double userLongitude,
             double radiusKm,
             String keyword,
-            com.example.deundeun.store.domin.Category category
+            com.example.deundeun.store.domain.Category category
     ) {
         List<Store> stores;
 

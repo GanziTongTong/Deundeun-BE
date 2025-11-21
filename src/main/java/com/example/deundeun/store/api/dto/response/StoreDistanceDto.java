@@ -1,7 +1,8 @@
 package com.example.deundeun.store.api.dto.response;
 
-import com.example.deundeun.store.domin.Category;
-import com.example.deundeun.store.domin.Store;
+import com.example.deundeun.store.application.StoreTimeFormatter;
+import com.example.deundeun.store.domain.Category;
+import com.example.deundeun.store.domain.Store;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -46,7 +47,7 @@ public class StoreDistanceDto {
                 store.getCategoryList(),
                 distance,
                 store.getPhoneNumber(),
-                store.getOpeningHours(),
+                StoreTimeFormatter.formatOpeningHours(store.getOpeningHours()),
                 parseDoubleOrNull(store.getLat()),
                 parseDoubleOrNull(store.getLogt())
         );

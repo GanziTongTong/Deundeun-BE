@@ -1,4 +1,4 @@
-package com.example.deundeun.store.domin;
+package com.example.deundeun.store.domain;
 
 public enum Category {
     CHILD_MEAL_CARD, // 아동급식카드

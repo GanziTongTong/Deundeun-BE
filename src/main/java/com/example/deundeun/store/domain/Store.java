@@ -1,4 +1,4 @@
-package com.example.deundeun.store.domin;
+package com.example.deundeun.store.domain;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(
     name = "store",
-    uniqueConstraints = {
+        uniqueConstraints = {
         @UniqueConstraint(
             name = "uk_store_name_address_category",
             columnNames = {"faclt_nm", "roadnm_addr", "categories"}

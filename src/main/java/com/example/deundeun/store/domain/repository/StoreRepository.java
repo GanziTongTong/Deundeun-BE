@@ -1,6 +1,6 @@
-package com.example.deundeun.store.domin.repository;
+package com.example.deundeun.store.domain.repository;
 
-import com.example.deundeun.store.domin.Store;
+import com.example.deundeun.store.domain.Store;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -108,3 +108,4 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
             @Param("keyword") String keyword
     );
 }
+
