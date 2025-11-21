@@ -2,12 +2,10 @@ package com.example.deundeun.store.api.dto.response;
 
 import com.example.deundeun.review.api.dto.response.ReviewInfoDto;
 import com.example.deundeun.store.application.StoreTimeFormatter;
-import com.example.deundeun.store.domin.Category;
-import com.example.deundeun.store.domin.Store;
+import com.example.deundeun.store.domain.Category;
+import com.example.deundeun.store.domain.Store;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Schema(description = "가맹점 상세 정보 DTO")
 public record StoreInfoDto(

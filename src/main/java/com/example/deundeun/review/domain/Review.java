@@ -1,6 +1,6 @@
 package com.example.deundeun.review.domain;
 
-import com.example.deundeun.store.domin.Store;
+import com.example.deundeun.store.domain.Store;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;

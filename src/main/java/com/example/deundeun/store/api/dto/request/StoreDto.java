@@ -1,6 +1,6 @@
 package com.example.deundeun.store.api.dto.request;
 
-import com.example.deundeun.store.domin.Category;
+import com.example.deundeun.store.domain.Category;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(description = "가맹점 조회 요청 DTO")
