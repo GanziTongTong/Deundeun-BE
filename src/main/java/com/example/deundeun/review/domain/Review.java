@@ -13,6 +13,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import java.util.HashSet;
 import java.util.Set;
 import lombok.AccessLevel;
@@ -37,6 +38,9 @@ public class Review {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_id")
     private Store store;
+
+    @OneToMany(mappedBy = "review", fetch = FetchType.LAZY)
+    private Set<ReviewImage> reviewImages = new HashSet<>();
 
     @Builder
     private Review(Set<ReviewKeyword> keywords, Store store) {

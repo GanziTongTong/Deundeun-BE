@@ -2,11 +2,16 @@ package com.example.deundeun.store.api.dto.response;
 
 import com.example.deundeun.store.application.StoreTimeFormatter;
 import com.example.deundeun.store.domain.Category;
-import com.example.deundeun.store.domain.Store;
+import com.example.deundeun.store.domain.repository.StoreWithDistance; // 인터페이스 import 필수
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @AllArgsConstructor
@@ -39,18 +44,32 @@ public class StoreDistanceDto {
     @Schema(description = "경도", example = "127.0240298256")
     private Double longitude;
 
-    public static StoreDistanceDto of(Store store, double distance) {
+    public static StoreDistanceDto from(StoreWithDistance store) {
         return new StoreDistanceDto(
                 store.getId(),
                 store.getFacltNm(),
                 store.getRoadnmAddr(),
-                store.getCategoryList(),
-                distance,
+                parseCategories(store.getCategories()),
+                store.getDistance(),
                 store.getPhoneNumber(),
                 StoreTimeFormatter.formatOpeningHours(store.getOpeningHours()),
                 parseDoubleOrNull(store.getLat()),
                 parseDoubleOrNull(store.getLogt())
         );
+    }
+
+    private static List<Category> parseCategories(String categoryStr) {
+        if (categoryStr == null || categoryStr.isBlank()) {
+            return new ArrayList<>();
+        }
+        try {
+            return Arrays.stream(categoryStr.split(","))
+                    .map(String::trim)
+                    .map(Category::valueOf)
+                    .collect(Collectors.toList());
+        } catch (IllegalArgumentException e) {
+            return Collections.emptyList();
+        }
     }
 
     private static Double parseDoubleOrNull(String s) {

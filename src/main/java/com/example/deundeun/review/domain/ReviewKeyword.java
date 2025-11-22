@@ -2,7 +2,6 @@ package com.example.deundeun.review.domain;
 
 import lombok.Getter;
 
-
 @Getter
 public enum ReviewKeyword {
     TASTY("맛있어요"),

@@ -5,11 +5,11 @@ import java.util.regex.Pattern;
 
 public class StoreTimeFormatter {
 
-    // 인스턴스 생성 방지
     private StoreTimeFormatter() {}
 
     /**
      * 월요일 기준으로 운영시간 포맷팅
+     * 월요일 휴무 -> 화요일 기준
      */
     public static String formatOpeningHours(String rawHours) {
         if (rawHours == null || rawHours.isBlank()) {

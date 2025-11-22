@@ -102,14 +102,4 @@ public class StoreController {
                 storeDto.category()
         ));
     }
-
-    @Operation(
-            summary = "[테스트] 전체 가맹점 수 조회",
-            description = "DB에 저장된 전체 가맹점 수를 반환합니다.",
-            responses = @ApiResponse(responseCode = "200", description = "조회 성공")
-    )
-    @GetMapping("/count")
-    public ResponseEntity<Long> getStoreCount() {
-        return ResponseEntity.ok(storeService.getStoreCount());
-    }
 }

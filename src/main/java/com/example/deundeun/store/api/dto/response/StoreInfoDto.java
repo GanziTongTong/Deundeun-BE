@@ -51,7 +51,9 @@ public record StoreInfoDto(
     }
 
     private static Double parseDoubleOrNull(String s) {
-        if (s == null) return null;
+        if (s == null) {
+            return null;
+        }
         try {
             return Double.parseDouble(s.trim());
         } catch (NumberFormatException e) {

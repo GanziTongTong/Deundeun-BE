@@ -1,28 +1,35 @@
 package com.example.deundeun.store.domain;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Index;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(
-    name = "store",
+        name = "store",
         uniqueConstraints = {
-        @UniqueConstraint(
-            name = "uk_store_name_address_category",
-            columnNames = {"faclt_nm", "roadnm_addr", "categories"}
-        )
-    },
-    indexes = {
-        @Index(name = "idx_lat_logt", columnList = "lat, logt"),
-        @Index(name = "idx_categories", columnList = "categories")
-    }
+                @UniqueConstraint(
+                        name = "uk_store_name_address_category",
+                        columnNames = {"faclt_nm", "roadnm_addr", "categories"}
+                )
+        },
+        indexes = {
+                @Index(name = "idx_lat_logt", columnList = "lat, logt"),
+                @Index(name = "idx_categories", columnList = "categories")
+        }
 )
 public class Store {
 
@@ -31,17 +38,15 @@ public class Store {
     private Long id;
 
     @Column(nullable = false, length = 255)
-    private String facltNm;
+    private String facltNm; // 가게명
 
     @Column(nullable = false, length = 500)
     private String roadnmAddr;
 
-    private String sigunNm;
     private String lotnoAddr;
     private String logt; // 경도
     private String lat; // 위도
 
-    // 카테고리를 콤마로 구분된 문자열로 저장 (예: "CHILD_MEAL_CARD,GOOD_NEIGHBOR_STORE")
     @Column(length = 500)
     private String categories;
 
@@ -51,8 +56,7 @@ public class Store {
     private String openingHours;
 
     @Builder
-    public Store(String sigunNm, String facltNm, String lotnoAddr, String roadnmAddr, String logt, String lat, String categories) {
-        this.sigunNm = sigunNm;
+    private Store(String facltNm, String lotnoAddr, String roadnmAddr, String logt, String lat, String categories) {
         this.facltNm = facltNm;
         this.lotnoAddr = lotnoAddr;
         this.roadnmAddr = roadnmAddr;
@@ -61,7 +65,6 @@ public class Store {
         this.categories = categories;
     }
 
-    // 카테고리 리스트로 반환
     public List<Category> getCategoryList() {
         List<Category> categoryList = new ArrayList<>();
         if (categories != null && !categories.isEmpty()) {
@@ -70,7 +73,6 @@ public class Store {
                 try {
                     categoryList.add(Category.valueOf(cat.trim()));
                 } catch (IllegalArgumentException e) {
-                    // 잘못된 카테고리는 무시
                 }
             }
         }
